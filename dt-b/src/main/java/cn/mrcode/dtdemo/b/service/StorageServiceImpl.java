@@ -22,6 +22,10 @@ public class StorageServiceImpl implements StorageService {
         LambdaQueryWrapper<TStorage> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(TStorage::getProductId, productId);
         TStorage storage = storageMapper.selectOne(queryWrapper);
+        if (storage == null) {
+            throw new RuntimeException("扣减库存失败，商品不存在");
+        }
+
         storage.setUsed(storage.getUsed() + count);
         storage.setResidue(storage.getResidue() - count);
         storageMapper.updateById(storage);
