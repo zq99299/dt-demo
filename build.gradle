@@ -1,0 +1,109 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:3.2.1"
+        classpath "com.alibaba.cloud:spring-cloud-alibaba-dependencies:2023.0.1.0"
+        classpath "org.springframework.cloud:spring-cloud-dependencies:2023.0.1"
+    }
+}
+
+apply plugin: "java"
+apply plugin: "org.springframework.boot"
+apply plugin: "io.spring.dependency-management"
+
+group = 'cn.mrcode.dtdemo'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+
+subprojects {
+    apply plugin: "java"
+    apply plugin: "org.springframework.boot"
+    apply plugin: "io.spring.dependency-management"
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
+    }
+    repositories {
+        mavenCentral()
+    }
+
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    dependencies {
+        // ~ 开发工具
+        developmentOnly 'org.springframework.boot:spring-boot-devtools'
+        annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+
+        testCompileOnly 'org.projectlombok:lombok'
+        testAnnotationProcessor 'org.projectlombok:lombok'
+
+        // ~ nacos 配置中心、服务发现
+        implementation 'com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config'
+        implementation 'com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery'
+
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-validation'
+        implementation 'org.springframework.retry:spring-retry'
+        implementation 'org.springframework.boot:spring-boot-starter-aop'
+
+        // ~ 数据库 ====================
+        // ~ mysql、mybatis
+        runtimeOnly 'com.mysql:mysql-connector-j'
+        implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+        implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
+        // mybatis - plus
+        implementation 'com.baomidou:mybatis-plus-boot-starter:3.5.5'
+        // mybatis-plus 代码生成器
+        implementation 'com.baomidou:mybatis-plus-generator:3.5.5'
+        testImplementation 'org.apache.velocity:velocity-engine-core:2.3'
+        implementation 'cn.hutool:hutool-all:5.8.26'
+
+        implementation 'com.alibaba.cloud:spring-cloud-starter-alibaba-seata'
+        implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+        implementation 'org.springframework.cloud:spring-cloud-loadbalancer'
+
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom "com.alibaba.cloud:spring-cloud-alibaba-dependencies:2023.0.1.0"
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:2023.0.1"
+        }
+    }
+
+    test {
+        enabled = false
+    }
+
+
+    // 配置使用预览特性
+    tasks.withType(JavaCompile).configureEach {
+        options.compilerArgs += "--enable-preview"
+    }
+
+    tasks.withType(Test).configureEach {
+        jvmArgs += "--enable-preview"
+    }
+
+    tasks.withType(JavaExec).configureEach {
+        jvmArgs += "--enable-preview"
+    }
+}

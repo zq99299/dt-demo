@@ -1,0 +1,3 @@
+rootProject.name = 'dt-demo'
+include 'dt-a'
+include 'dt-b'

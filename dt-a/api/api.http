@@ -1,0 +1,8 @@
+#### 订单正常
+POST http://localhost:8080/order/create?userId=1&productId=1&count=5
+
+#### 订单异常（因为数量超过了库存）
+POST http://localhost:8080/order/create?userId=1&productId=1&count=20
+
+### 库存服务异常（因为商品ID错误）
+http://localhost:8080/order/create?userId=1&productId=error&count=5

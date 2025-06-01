@@ -1,0 +1,69 @@
+server:
+  port: 8080
+#  tomcat:
+#    connection-timeout: 60s
+logging:
+  level:
+    com.atomikos: DEBUG
+
+spring:
+  application:
+    name: order-service
+  profiles:
+    active: dev
+  config:
+    import: "optional:nacos:${spring.application.name}.yml?refresh=true,optional:nacos:${spring.application.name}-${spring.profiles.active}.yml?refresh=true"
+  cloud:
+    # Nacos帮助文档: https://nacos.io/zh-cn/docs/v2/concepts.html
+    nacos:
+      config:
+        server-addr: mrcode.cn:8848
+        namespace: "seata-server"
+        group: SEATA_GROUP
+        # 认证信息
+        #        username: nacos
+        #        password: nacos
+        fileExtension: yaml
+        import-check:
+          enabled: false
+      discovery:
+        server-addr: mrcode.cn:8848
+        # 注册到 nacos 的指定 namespace，默认为 public
+        namespace: "seata-server"
+        group: SEATA_GROUP
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+  datasource:
+    url: jdbc:mysql://mrcode.cn:3306/dt_demo_a?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&useSSL=true
+    username: root
+    password: 123456
+
+
+mybatis-plus:
+  mapper-locations: classpath*:/repo/mapper/*Mapper.xml
+
+
+seata:
+  enabled: true
+  tx-service-group: default_tx_group  # 事务组名称
+  service:
+    vgroup-mapping:
+      # no available service found in cluster 'default', please make sure registry config correct and keep your seata server running
+      default_tx_group: default
+  registry:
+    type: nacos  # 使用 Nacos 注册中心
+    nacos:
+      server-addr: mrcode.cn:8848
+      namespace: "seata-server"
+      group: SEATA_GROUP
+  config:
+    type: nacos
+    nacos:
+      data-id: seataServer.properties
+      group: SEATA_GROUP
+      namespace: "seata-server"
+      server-addr: mrcode.cn:8848
+  mode: XA  # 强制使用 XA 模式
+  # 否则会会导致 seata 访问 undo_log 表：java.sql.SQLSyntaxErrorException: Table 'dt_demo_a.undo_log' doesn't exist
+  # 启动后，控制台会看到打印：Auto proxy data source 'dataSource' by 'XA' mode.
+  data-source-proxy-mode: XA  # 数据源代理模式
