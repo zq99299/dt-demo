@@ -11,7 +11,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author zhuqiang
- * @since 2025-05-31
+ * @since 2025-06-01
  */
 @TableName("t_order")
 public class TOrder implements Serializable {
@@ -28,6 +28,11 @@ public class TOrder implements Serializable {
     private Integer count;
 
     private Long money;
+
+    /**
+     * 订单状态
+     */
+    private Integer status;
 
     public Long getId() {
         return id;
@@ -69,6 +74,14 @@ public class TOrder implements Serializable {
         this.money = money;
     }
 
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "TOrder{" +
@@ -77,6 +90,7 @@ public class TOrder implements Serializable {
         ", productId = " + productId +
         ", count = " + count +
         ", money = " + money +
+        ", status = " + status +
         "}";
     }
 }

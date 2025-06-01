@@ -11,7 +11,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author zhuqiang
- * @since 2025-05-31
+ * @since 2025-06-01
  */
 @TableName("t_storage")
 public class TStorage implements Serializable {
@@ -27,7 +27,15 @@ public class TStorage implements Serializable {
 
     private Integer used;
 
+    /**
+     * 可用库存
+     */
     private Integer residue;
+
+    /**
+     * 冻结库存
+     */
+    private Integer frozen;
 
     public Long getId() {
         return id;
@@ -69,6 +77,14 @@ public class TStorage implements Serializable {
         this.residue = residue;
     }
 
+    public Integer getFrozen() {
+        return frozen;
+    }
+
+    public void setFrozen(Integer frozen) {
+        this.frozen = frozen;
+    }
+
     @Override
     public String toString() {
         return "TStorage{" +
@@ -77,6 +93,7 @@ public class TStorage implements Serializable {
         ", total = " + total +
         ", used = " + used +
         ", residue = " + residue +
+        ", frozen = " + frozen +
         "}";
     }
 }
